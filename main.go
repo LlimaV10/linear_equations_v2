@@ -70,20 +70,6 @@ func matrix_transpond(m [][]float64) [][]float64 {
 	return m1
 }
 
-func get_reverse_matrix_rut(m [][]float64, n int, reverse *[][]float64, det float64, flag *int) {
-	start := (len(m) / 4) * (n)
-	end := (len(m) / 4) * (n + 1)
-	//fmt.Printf("st %d end %d\n", start, end)
-	for i := start; i < end; i++ {
-		for j := 0; j < len(m); j++ {
-			mm := get_matrix_minor(m, i, j);
-			(*reverse)[i][j] = math.Pow(float64(-1), float64(i + j)) * get_matrix_determinant(mm) / det
-		}
-	}
-	(*flag)++
-	//fmt.Printf("flag %d\n", *flag)
-}
-
 func get_reverse_matrix(m [][]float64) [][]float64 {
 	m1 := make([]([]float64), len(m))
 	for z := 0; z < len(m); z++ {
@@ -91,13 +77,11 @@ func get_reverse_matrix(m [][]float64) [][]float64 {
 	}
 	det := get_matrix_determinant(m)
 	fmt.Printf("Детерминант |A| = %.4f\n", det)
-	flag := 0
-	go get_reverse_matrix_rut(m, 0, &m1, det, &flag)
-	go get_reverse_matrix_rut(m, 1, &m1, det, &flag)
-	go get_reverse_matrix_rut(m, 2, &m1, det, &flag)
-	go get_reverse_matrix_rut(m, 3, &m1, det, &flag)
-	for ok := true; ok; ok = flag < 4 {
-		time.Sleep(1000000)
+	for i := 0; i < len(m); i++ {
+		for j := 0; j < len(m); j++ {
+			mm := get_matrix_minor(m, i, j);
+			m1[i][j] = math.Pow(float64(-1), float64(i + j)) * get_matrix_determinant(mm) / det
+		}
 	}
 	fmt.Println("Матрица алгебраических дополнений разделённая на |A|:")
 	print_matrix(m1)
