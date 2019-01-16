@@ -156,9 +156,9 @@ func main() {
 
 	t2 := time.Now().UnixNano()
 	time := float64(t2 - t1) / 100000000.0 
-	if (time > 60.0) {
-		fmt.Printf("Time: %dm:%fs\n",  int(time / 60.0), time - float64(int(time / 60.0)) * 60.0)
+	if (time > 600.0) {
+		fmt.Printf("\nTime: %dm:%fs\n",  int(time / 600.0), (time - float64(int(time / 600.0)) * 600.0) / 10.0)
 	} else {
-		fmt.Printf("Time: %fs\n",  time)
+		fmt.Printf("\nTime: %fs\n",  time)
 	}
 }
